@@ -11,7 +11,7 @@
       "pre-commit": "lint-staged",
       "pre-push": "npm test"
     }
-  },  
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
