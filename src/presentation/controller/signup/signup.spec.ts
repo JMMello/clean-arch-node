@@ -1,11 +1,17 @@
 import { SignUpController } from "./signup";
-import { EmailValidator } from "../protocols/email-validator";
-import { MissingParamError, InvalidParamError, ServerError } from "../errors";
-import { AddAccount, AddAccountModel } from "../../domain/use-cases";
-import { AccountModel } from "../../domain/models";
 
+import {
+  MissingParamError,
+  InvalidParamError,
+  ServerError,
+} from "../../errors";
 
-
+import {
+  AddAccount,
+  AddAccountModel,
+  EmailValidator,
+  AccountModel,
+} from "./signup-protocols";
 
 const makeEmailValidator = (): EmailValidator => {
   class EmailValidatorStub implements EmailValidator {
@@ -20,14 +26,14 @@ const makeEmailValidator = (): EmailValidator => {
 const makeAddAccount = (): AddAccount => {
   class AddAccountStub implements AddAccount {
     add(account: AddAccountModel): AccountModel {
-      const fakeAccount =  {
-        id: 'valid_id',
-        name: 'valid_name',
-        email: 'email@email.com',
-        password: 'valid_password'
-      }
+      const fakeAccount = {
+        id: "valid_id",
+        name: "valid_name",
+        email: "email@email.com",
+        password: "valid_password",
+      };
 
-      return fakeAccount
+      return fakeAccount;
     }
   }
 
@@ -37,12 +43,12 @@ const makeAddAccount = (): AddAccount => {
 interface SutTypes {
   sut: SignUpController;
   emailValidatorStub: EmailValidator;
-  addAccountStub: AddAccount
+  addAccountStub: AddAccount;
 }
 
 const makeSut = (): SutTypes => {
   const emailValidatorStub = makeEmailValidator();
-  const addAccountStub = makeAddAccount()
+  const addAccountStub = makeAddAccount();
   const sut = new SignUpController(emailValidatorStub, addAccountStub);
 
   return {
@@ -167,8 +173,7 @@ describe("SignUp Controller", () => {
 
   test("Should call AddAccount with correct values", () => {
     const { sut, addAccountStub } = makeSut();
-    const addSpy = jest
-      .spyOn(addAccountStub, "add")
+    const addSpy = jest.spyOn(addAccountStub, "add");
 
     const httpRequest = {
       body: {
@@ -188,12 +193,10 @@ describe("SignUp Controller", () => {
   });
 
   test("Should return 500 if EmailValidator throws", () => {
-    const {sut, emailValidatorStub } = makeSut()
-    jest
-      .spyOn(emailValidatorStub, "isValid")
-      .mockImplementationOnce(() => {
-        throw new Error()
-      })
+    const { sut, emailValidatorStub } = makeSut();
+    jest.spyOn(emailValidatorStub, "isValid").mockImplementationOnce(() => {
+      throw new Error();
+    });
 
     const httpRequest = {
       body: {
