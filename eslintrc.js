@@ -11,5 +11,9 @@ module.exports = {
   },
   rules: {
     // Suas regras personalizadas, se houver
+
+    // Exemplo: Permitir o uso de 'const'
+    'no-const-assign': 'off',
+    'prefer-const': 'error',
   },
 };
