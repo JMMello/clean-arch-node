@@ -4,10 +4,10 @@ describe("DbAddAccount UseCase ", () => {
   test("Should call Encrypter with correct password", async () => {
     class EncrypterStub {
       async encrypt(value: string): Promise<string> {
-        return new Promise((resolve) => resolve("hashed_password"));
+        return new Promise((resolve) => resolve("valid_password"));
       }
     }
-
+ 
     const encryperStub = new EncrypterStub();
     const sut = new DbAddAccount(encryperStub);
     const encryptSpy = jest.spyOn(encryperStub, "encrypt");
@@ -16,8 +16,8 @@ describe("DbAddAccount UseCase ", () => {
       email: "valid_email",
       password: "valid_password",
     };
-    
+
     await sut.add(accountData);
-    // expect(encryptSpy).toHaveBeenCalledWith("valid_password");
+    expect(encryptSpy).toHaveBeenCalledWith("valid_password");
   });
 });
